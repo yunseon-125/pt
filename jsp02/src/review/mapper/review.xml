@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+  <select id="rvList" resultType="review.dto.ReviewDTO">
+    select idx,name,email,content,post_date
+    from review
+    where ${searchkey} like #{search}
+    order by idx desc
+  </select>
+  
+  <select id="rvListAll" resultType="review.dto.ReviewDTO">
+    select idx,name,email,content,post_date
+    from review
+    where name like #{search} or content like #{search}
+    order by idx desc
+  </select>
+  
+  <insert id="rvInsert">
+    insert into review 
+    (idx, name, email, passwd, content) values
+    (review_seq.nextval 
+    , #{name}, #{email}, #{passwd}, #{content})
+  </insert>
+  
+  <select id="passwdCheck" resultType="int">
+    select count(*) from review 
+    where idx=#{idx} and passwd=#{passwd}
+  </select>
+  
+  <select id="rvDetail" parameterType="int" 
+  resultType="review.dto.ReviewDTO">
+    select * from review
+    where idx=#{idx}
+  </select>
+  
+  <update id="rvUpdate">
+    update REVIEW
+    set name=#{name}, email=#{email}, passwd=#{passwd}
+    , content=#{content}
+    where idx=#{idx}
+  </update>
+  
+  <delete id="rvDelete">
+    delete from review
+    where idx=#{idx}
+  </delete>
+  
+</mapper>
